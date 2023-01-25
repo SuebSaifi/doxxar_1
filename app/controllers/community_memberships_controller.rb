@@ -6,6 +6,7 @@ class CommunityMembershipsController < ApplicationController
 
   skip_before_action :cannot_access_if_banned
   skip_before_action :cannot_access_without_confirmation
+  skip_before_action :cannot_access_without_identity_verification
   skip_before_action :ensure_consent_given
   skip_before_action :ensure_user_belongs_to_community
 

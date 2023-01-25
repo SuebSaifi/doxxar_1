@@ -28,7 +28,8 @@ class CommunityMembership < ApplicationRecord
     PENDING_EMAIL_CONFIRMATION = "pending_email_confirmation".freeze,
     PENDING_CONSENT = "pending_consent".freeze,
     BANNED = "banned".freeze,
-    DELETED_USER = "deleted_user".freeze
+    DELETED_USER = "deleted_user".freeze,
+    PENDING_IDENTITY_DOCUMENT = "pending_identity_document".freeze
   ].freeze
 
   belongs_to :person
@@ -51,7 +52,10 @@ class CommunityMembership < ApplicationRecord
   scope :not_deleted_user, -> { where.not(status: DELETED_USER) }
   scope :not_accepted, -> { where.not(status: ACCEPTED) }
   scope :pending_email_confirmation, -> { where(status: PENDING_EMAIL_CONFIRMATION) }
+  scope :pending_identity_document, -> { where(status: PENDING_IDENTITY_DOCUMENT) }
   scope :pending_consent, -> { where(status: PENDING_CONSENT) }
+
+  after_save :status_approved, if: :saved_change_to_status?
 
   def person_can_join_community_only_once
     if CommunityMembership.find_by_person_id_and_community_id(person_id, community_id)
@@ -75,11 +79,23 @@ class CommunityMembership < ApplicationRecord
     status == PENDING_EMAIL_CONFIRMATION
   end
 
+  def pending_identity_document?
+    status == PENDING_IDENTITY_DOCUMENT
+  end
+
   def pending?
     not accepted?
   end
 
   def banned?
     status == BANNED
+  end
+
+  def status_approved
+    if self.status == "accepted"
+      PersonMailer.status_approved(community, self, self.person).deliver_now!
+    elsif self.status == "pending_identity_document"
+      PersonMailer.status_pending(community, self, self.person).deliver_now!
+    end
   end
 end

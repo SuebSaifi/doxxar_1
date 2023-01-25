@@ -19,6 +19,8 @@
 #  description                     :text(65535)
 #  origin                          :string(255)
 #  destination                     :string(255)
+#  source_country                  :string(255)
+#  source_city                     :string(255)
 #  valid_until                     :datetime
 #  delta                           :boolean          default(TRUE), not null
 #  open                            :boolean          default(TRUE)

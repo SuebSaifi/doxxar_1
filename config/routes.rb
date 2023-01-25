@@ -904,6 +904,8 @@ Rails.application.routes.draw do
 
     get '/:person_id/settings/profile', to: redirect("/%{person_id}/settings") #needed to keep old links working
 
+    resources :identity_documents
+    get "/pending_document_confirmation", to: "identity_documents#after_upload_document", as: "after_upload_document"
   end # scope locale
 
   id_to_username = Proc.new do |params, req|
@@ -916,6 +918,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/get_all_states_belongs_to_country", to: "listings#get_states", as: "get_state"
   get "(/:locale)/people/:person_id(*path)" => redirect(id_to_username), :constraints => { :locale => locale_matcher, :person_id => /[a-zA-Z0-9_-]{22}/ }
 
   get "(/:locale)/:person_id(*path)" => redirect(id_to_username), :constraints => { :locale => locale_matcher, :person_id => /[a-zA-Z0-9_-]{22}/ }

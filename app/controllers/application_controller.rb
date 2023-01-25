@@ -38,6 +38,7 @@ class ApplicationController < ActionController::Base
     :maintenance_warning,
     :cannot_access_if_banned,
     :cannot_access_without_confirmation,
+    :cannot_access_without_identity_verification,
     :ensure_consent_given,
     :ensure_user_belongs_to_community,
     :set_display_expiration_notice,
@@ -209,8 +210,7 @@ class ApplicationController < ActionController::Base
   # community are all expired.
   def ensure_user_belongs_to_community
     return unless @current_user
-
-    if !@current_user.has_admin_rights?(@current_community) && @current_user.accepted_community != @current_community
+    if !@current_user.has_admin_rights?(@current_community) && @current_user.accepted_community != @current_community && @current_user.accepted_identity != @current_community
 
       logger.info(
         "Automatically logged out user that doesn't belong to community",
@@ -350,6 +350,24 @@ class ApplicationController < ActionController::Base
       end
 
       redirect_to confirmation_pending_path
+    end
+  end
+
+  def cannot_access_without_identity_verification
+    return unless @current_user
+
+    return if @current_user.is_admin?
+
+    if @current_user.community_membership.pending_identity_document?
+      if @current_user.identity_document.present?
+        if @current_user.is_customer?
+          redirect_to search_path and return
+        else
+          redirect_to after_upload_document_path and return
+        end
+      else
+        redirect_to new_identity_document_path(id: @current_community.id, id:@current_user.id) and return
+      end
     end
   end
 

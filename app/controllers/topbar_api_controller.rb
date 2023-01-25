@@ -1,6 +1,7 @@
 class TopbarApiController < ApplicationController
 
   skip_before_action :cannot_access_without_confirmation, :ensure_consent_given
+  skip_before_action :cannot_access_without_identity_verification
 
   def props
     locale = params[:locale]

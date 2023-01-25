@@ -2627,6 +2627,39 @@ en:
       landing_page_version/section/hero:
         cta_button_text: Text
         cta_button_url: URL
+  identification:
+    new_document:
+      document: Document
+      new_identification_form: Please upload your document
+      upload_document: Upload document
+      flash:
+        notice: Document Uploaded Successfully
+    update_document:
+      update_identification_form: View Document for %{name}
+      user_id: "Person Id :"
+      first_name: "First Name :"
+      last_name: "Last Name :"
+      user_email: "Email :"
+      status: "Status :"
+      update_status: Update status
+      type: Identity Document
+      flash:
+        notice: Document Satus updated Successfully
+    after_upload_document:
+      after_upload_document: Hi %{name}, Your account not approved yet. We are cheking your documents. You will be informed via email.
+      header: Document verification pending
+    email:
+      status_accepted: Your account has been accepted
+      status_pending:  Your account is pending
+      common:
+        hey: Hello %{name},
+        account_review: Welcome to %{service_name}! Your account is in review for document.
+      verify_document: Please verify document for %{name}
+      link: Verify document
+  person:
+    role: Role
+    select_role: -- Select Role -- 
+
   canada_states:
     AB: Alberta
     BC: British Columbia

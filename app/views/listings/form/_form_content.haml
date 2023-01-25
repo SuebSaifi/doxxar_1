@@ -1,12 +1,20 @@
 = render :partial => "listings/form/javascripts", :locals => { listing_id: @listing.id || "false", minimum_price_cents: @listing_presenter.commission[:minimum_price_cents], run_js_immediately: run_js_immediately, shape: shape}
 
-= form_for @listing_presenter.listing_form_object, :html => {:multipart => true} do |form|
+= form_for @listing_presenter.listing_form_object, :html => {:multipart => true}, remote: true do |form|
   = render :partial => "listings/form/title", :locals => { :form => form }
   = render :partial => "listings/form/price", :locals => { :form => form, :run_js_immediately => run_js_immediately }
   = render :partial => "listings/form/shipping", :locals => { :form => form }
   = render :partial => "listings/form/description", :locals => { :form => form }
   = render :partial => "listings/form/custom_fields", :locals => { :form => form }
   = render :partial => "listings/form/valid_until", :locals => { :form => form }
+  = form.label :source_location
+  %div{style: "display:flex"}
+    %div
+      = form.label :source_country
+      = form.select :source_country, options_for_select(CS.countries.collect{ |c| [c[1], c[0]] } ), { include_blank: '-- Select a country --' }, {style: "width: 16rem; margin-right: 10px"}
+    %div
+      = form.label :source_city
+      = form.select :source_city, options_for_select([]), { include_blank: '-- Select a state --' }, :remote=> true
   - if show_location?
     = render :partial => "listings/form/origin", :locals => { :form => form }
     = render :partial => "listings/form/googlemap", :locals => { :form => form, :run_js_immediately => run_js_immediately}
@@ -16,3 +24,13 @@
 
 = render :partial => "listings/help_texts", :collection => ["help_valid_until"], :as => :field
 = render "layouts/markdown_help", run_js_immediately: run_js_immediately
+
+:javascript
+  $(document).ready(function(){
+    $("#listing_source_country").on("change", function(){
+      $.ajax({
+        url: "/get_all_states_belongs_to_country?country=" + this.value,
+        type: "GET"
+      })
+    });
+  });

@@ -122,6 +122,8 @@ GEM
       xpath (~> 3.2)
     childprocess (4.1.0)
     chunky_png (1.4.0)
+    city-state (0.1.0)
+      rubyzip (>= 1.1)
     clavius (1.0.3)
     cldr-plurals-runtime-rb (1.0.1)
     climate_control (0.2.0)
@@ -284,6 +286,8 @@ GEM
     jwt (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
+    letter_opener (1.8.1)
+      launchy (>= 2.2, < 3)
     libv8 (7.3.492.27.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -663,6 +667,7 @@ DEPENDENCIES
   biz
   bootsnap (~> 1.4.5)
   capybara (~> 3.36)
+  city-state
   cocoon
   codemirror-rails
   coffee-rails (~> 4.2.2)
@@ -699,6 +704,7 @@ DEPENDENCIES
   jquery-rails (~> 4.3.1)
   js-routes (~> 1.3.3)
   launchy (~> 2.1)
+  letter_opener
   listen (~> 3.1.5)
   lograge (~> 0.10.0)
   mail (~> 2.6.6.rc1)

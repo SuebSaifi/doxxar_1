@@ -53,6 +53,9 @@ class FactoryGirl::DefinitionProxy
 end
 
 FactoryGirl.define do
+  factory :identity_document do
+    document "MyString"
+  end
   sequence :id do |_|
     SecureRandom.urlsafe_base64
   end

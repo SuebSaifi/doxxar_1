@@ -99,6 +99,13 @@ class ListingsController < ApplicationController
         payment_process: @listing_presenter.process })
   end
 
+  def get_states
+    @states = CS.states("#{params[:country]}")
+    respond_to do |f|
+      f.json { render json: @states }
+    end
+  end
+
   def new
     @listing = Listing.new
     make_listing_presenter

@@ -523,6 +523,8 @@ development:
   # Usually it's easier to run development without SSL
   always_use_ssl: false
 
+  mail_delivery_method: "letter_opener"
+
   # Skip email confirmation
   skip_email_confirmation: true
 

@@ -1,0 +1,1 @@
+$("#listing_source_city").html("<%= raw escape_javascript options_for_select(@states.collect { |d| [d[1], d[0]] }) %>");

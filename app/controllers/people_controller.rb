@@ -17,6 +17,7 @@ class PeopleController < Devise::RegistrationsController
 
   skip_before_action :cannot_access_if_banned,            only: LOOSER_ACCESS_CONTROL
   skip_before_action :cannot_access_without_confirmation, only: LOOSER_ACCESS_CONTROL
+  skip_before_action :cannot_access_without_identity_verification
   skip_before_action :ensure_consent_given,               only: LOOSER_ACCESS_CONTROL
   skip_before_action :ensure_user_belongs_to_community,   only: LOOSER_ACCESS_CONTROL
 
@@ -108,10 +109,12 @@ class PeopleController < Devise::RegistrationsController
 
     # send email confirmation
     # (unless disabled for testing environment)
-    if APP_CONFIG.skip_email_confirmation
+    if false #APP_CONFIG.skip_email_confirmation
       email.confirm!
-
-      redirect_to search_path
+      if @person.is_traveller?
+        redirect_to new_identity_document_path(id: @current_community.id, id:@person.id)
+      end
+      # redirect_to search_path
     else
       Email.send_confirmation(email, @current_community)
 
@@ -314,7 +317,8 @@ class PeopleController < Devise::RegistrationsController
         :email,
         :test_group_number,
         :community_id,
-        :admin_emails_consent
+        :admin_emails_consent,
+        :role
     ).permit!
     result.merge(params.require(:person)
       .slice(:custom_field_values_attributes)

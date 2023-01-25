@@ -5,7 +5,7 @@ class MercuryUpdateController < ApplicationController
   before_action :ensure_is_admin
 
   #Allow admin to access admin panel before email confirmation
-  skip_before_action :cannot_access_without_confirmation
+  skip_before_action :cannot_access_without_confirmation, :cannot_access_without_identity_verification
 
   # Update content with WYSIWYG editor Mercury
   def update

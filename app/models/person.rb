@@ -44,6 +44,7 @@
 #  cloned_from                        :string(22)
 #  google_oauth2_id                   :string(255)
 #  linkedin_id                        :string(255)
+#  role                               :string(255)
 #
 # Indexes
 #
@@ -111,6 +112,7 @@ class Person < ApplicationRecord
   has_many :communities, -> { where("community_memberships.status = 'accepted'") }, :through => :community_memberships
   has_one  :community_membership, :dependent => :destroy
   has_one  :accepted_community, -> { where("community_memberships.status= 'accepted'") }, through: :community_membership, source: :community
+  has_one  :accepted_identity, -> { where("community_memberships.status = 'pending_identity_document'") }, through: :community_membership, source: :community
   has_many :invitations, :foreign_key => "inviter_id", :dependent => :destroy, :inverse_of => :inviter
   has_many :auth_tokens, :dependent => :destroy
   has_many :follower_relationships, :dependent => :destroy
@@ -127,6 +129,9 @@ class Person < ApplicationRecord
   has_many :starter_transactions, :class_name => "Transaction", :foreign_key => "starter_id", :dependent => :destroy, :inverse_of => :starter
   has_many :payer_stripe_payments, :class_name => "StripePayment", :foreign_key => "payer_id", :dependent => :destroy, :inverse_of => :payer
   has_many :receiver_stripe_payments, :class_name => "StripePayment", :foreign_key => "receiver_id", :dependent => :destroy, :inverse_of => :receiver
+
+  has_one :identity_document, :dependent => :destroy
+
 
   deprecate communities: "Use accepted_community instead.",
             community_memberships: "Use community_membership instead.",
@@ -204,8 +209,13 @@ class Person < ApplicationRecord
     "email_from_admins"
   ]
 
+  PERSON_ROLES = [
+    TRAVELLER = 'Traveller'.freeze,
+    CUSTOMER = 'Customer'.freeze
+  ]
   serialize :preferences
 
+  validates_inclusion_of :role, :in => PERSON_ROLES
   validates_length_of :phone_number, :maximum => 25, :allow_nil => true, :allow_blank => true
   validates_length_of :given_name, :within => 1..30, :allow_nil => true, :allow_blank => true
   validates_length_of :family_name, :within => 1..30, :allow_nil => true, :allow_blank => true
@@ -605,6 +615,14 @@ class Person < ApplicationRecord
     custom_field_values.by_question(custom_field).first
   end
 
+  def is_traveller?
+    self.role == "Traveller"
+  end
+
+  def is_customer?
+    self.role == "Customer"
+  end
+
   private
 
   def digest(password, salt)
@@ -627,4 +645,5 @@ class Person < ApplicationRecord
       "(#{table}.given_name LIKE #{pattern} OR #{table}.family_name LIKE #{pattern} OR #{table}.display_name LIKE #{pattern})"
     end
   end
+
 end

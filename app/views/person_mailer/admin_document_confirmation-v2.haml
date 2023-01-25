@@ -1,0 +1,14 @@
+- link = identity_document_url(:host => @host, :locale => I18n.locale, :id => @document.id) 
+%tr
+	%td.person-name
+		%h1
+			= t("identification.email.common.hey", :name => PersonViewUtils.person_display_name_for_type(@admin, "first_name_only"))
+%tr
+	%td
+		%p
+			= t("identification.email.verify_document", :name => PersonViewUtils.person_display_name_for_type(@person, "first_name_only"))
+%tr
+	%td.action-button
+		%a.email-action-button{:href => link, :target => "_blank"}
+			→
+			= t("identification.email.link")

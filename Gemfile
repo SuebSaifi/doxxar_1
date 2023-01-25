@@ -118,6 +118,7 @@ group :development, :test do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'factory_girl_rails', '~> 4.8.0'
+  gem "letter_opener"
 end
 
 group :development, :staging do
@@ -190,3 +191,4 @@ gem "cocoon"
 gem "fast-polylines"
 gem "codemirror-rails"
 gem 'rb-inotify', '~> 0.10'
+gem 'city-state'

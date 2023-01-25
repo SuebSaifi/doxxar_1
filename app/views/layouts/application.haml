@@ -124,6 +124,19 @@
     :javascript
       $(document).ready(function() { initialize_defaults("#{I18n.locale}"); #{yield :javascript} });
 
+      $(function () {
+          "use strict";
+          $(".popup img").on("click", function () {
+            var $src = $(this).attr("src");
+            $(".show").fadeIn();
+            $(".img-show img").attr("src", $src);
+          });
+
+          $("#close, .overlay").on("click", function () {
+            $(".show").fadeOut();
+          });
+       });
+
     = render 'analytics/bottom_scripts'
     = render 'layouts/noscript'
     = render 'layouts/body_script'

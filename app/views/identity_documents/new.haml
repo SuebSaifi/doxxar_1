@@ -1,0 +1,10 @@
+- content_for :title_header do
+	%h1= t("identification.new_document.new_identification_form")
+
+%p
+	.form_field_container
+		= form_for @identity_document do |form|
+			.inline-label-container
+				= form.label :document, t("identification.new_document.document")
+			= form.file_field :document
+			= form.button t("identification.new_document.upload_document")

@@ -654,7 +654,11 @@ class Community < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def approve_pending_membership(person, email_address=nil)
     membership = community_memberships.where(:person_id => person.id, :status => "pending_email_confirmation").first
     if membership && (email_address.nil? || email_allowed?(email_address))
-      membership.update_attribute(:status, "accepted")
+      if person.is_customer?
+        membership.update_attribute(:status, "accepted")
+      elsif person.is_traveller?
+        membership.update_attribute(:status, "pending_identity_document")
+      end
       return true
     end
     return false

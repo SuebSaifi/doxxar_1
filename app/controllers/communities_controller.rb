@@ -3,6 +3,7 @@ class CommunitiesController < ApplicationController
               :perform_redirect,
               :cannot_access_if_banned,
               :cannot_access_without_confirmation,
+              :cannot_access_without_identity_verification,
               :ensure_consent_given,
               :ensure_user_belongs_to_community
 

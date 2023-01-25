@@ -1,7 +1,7 @@
 class InfosController < ApplicationController
 
   #Allow infos to be viewed before email confirmation
-  skip_before_action :cannot_access_without_confirmation
+  skip_before_action :cannot_access_without_confirmation, :cannot_access_without_identity_verification
 
   def about
     @selected_tribe_navi_tab = "about"

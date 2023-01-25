@@ -5,7 +5,7 @@ class Admin::AdminBaseController < ApplicationController
   before_action :ensure_is_admin
 
   #Allow admin to access admin panel before email confirmation
-  skip_before_action :cannot_access_without_confirmation
+  skip_before_action :cannot_access_without_confirmation, :cannot_access_without_identity_verification
 
   before_action :admin2_banner
 

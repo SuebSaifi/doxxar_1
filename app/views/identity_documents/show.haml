@@ -1,0 +1,129 @@
+- content_for :title_header do
+	%h1= t("identification.update_document.update_identification_form", :name => PersonViewUtils.person_display_name_for_type(@person, "first_name_only"))
+
+.id-card
+	.id-document
+		%h4= t("identification.update_document.type")
+	.id-photo
+		%span.id-pic
+			%div.popup
+				=image_tag @identity_document.document.url
+		%span.id-info{:style => "display: flex; flex-direction: column"}
+			%span.id-username
+				%span.id-name= t("identification.update_document.user_id")
+				%span.id-name-imfo
+					= @identity_document.person.id
+			%span.id-username
+				%span.id-name= t("identification.update_document.first_name")
+				%span.id-name-imfo
+					= @identity_document.person.given_name
+			%span.id-username
+				%span.id-name= t("identification.update_document.last_name")
+				%span.id-name-imfo
+					= @identity_document.person.family_name
+			%span.id-username
+				%span.id-name= t("identification.update_document.user_email")
+				%span.id-name-imfo
+					- email = Email.find_by_person_id(@identity_document.person.id).address
+					= email
+
+			%span.id-status
+				= form_for(@identity_document, url: identity_document_path, :html => { :method => :put}) do |form|
+					= form.label :status, t("identification.update_document.status")
+					= form.select :status, options_for_select(IdentityDocument::IDENTITY_DOCUMENT_STATUSES, form.object.status), { include_blank: '-- Select a status --' }, class:"form-control"
+					= form.button t("identification.update_document.update_status")
+.show
+	.overlay
+	.img-show
+		%span#close X
+		%img{:src => ""}/
+
+
+:css
+	.id-card{
+	  animation: float 6s ease-in-out infinite;
+	  background: #e0f6ff;
+	  border-radius: 5px;
+	  margin: auto;
+	  height: 20rem;
+	  width: 85%;
+	  padding: 10px;
+	}
+	.id-document,
+	.id-number{
+	  color: #000;
+	  font-size: small;
+	  padding: 5px;
+	}
+	.id-photo{
+	  display: flex;
+	}
+	.id-pic{
+	   height: 15rem;
+	   width: 20rem;
+	}
+	.id-info{
+		 margin-left: 40px;
+	   padding: 10px;
+	   width: 60%;
+	}
+	.id-info::before{
+	   margin-top: 35px;
+	  -webkit-order: 1
+	}
+	.id-info::after{
+	   margin-top: 10px;
+	  -webkit-order: 1
+	   width: 85%;
+	}
+	.id-pic > .popup> img{
+		height: 15rem;
+	  width: 20rem;
+	  cursor: pointer;
+	}
+	.id-name{
+		font-weight: 600;
+	}
+	.id-username{
+		margin-bottom: 5px;
+	}
+	.show{
+		z-index: 999;
+		display: none;
+	}
+	.show .overlay{
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,.66);
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	.show .img-show{
+		width: 50%;
+		height: 400px;
+		background: #FFF;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		overflow: hidden
+	}
+	.img-show span{
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		z-index: 99;
+		cursor: pointer;
+	}
+	.img-show img{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	#close{
+		color: #ffffff;
+		font-weight: 700;
+	}

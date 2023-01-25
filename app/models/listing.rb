@@ -19,6 +19,8 @@
 #  description                     :text(65535)
 #  origin                          :string(255)
 #  destination                     :string(255)
+#  source_country                  :string(255)
+#  source_city                     :string(255)
 #  valid_until                     :datetime
 #  delta                           :boolean          default(TRUE), not null
 #  open                            :boolean          default(TRUE)
@@ -393,5 +395,9 @@ class Listing < ApplicationRecord
     end
     ids = listings.pluck(:id)
     ListingImage.where(listing_id: ids).destroy_all
+  end
+
+  def country
+    CS.countries
   end
 end

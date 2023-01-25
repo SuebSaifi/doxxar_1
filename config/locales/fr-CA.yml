@@ -2402,6 +2402,32 @@ fr-CA:
       landing_page_version/section/hero:
         cta_button_text: 
         cta_button_url: 
+  identification:
+    new_document:
+      document: Document
+      new_identification_form: Veuillez télécharger votre document
+      upload_document: Télécharger un document
+      flash:
+        notice: Document téléchargé avec succès
+    update_document:
+      update_identification_form: affichage d'un document
+      user_id: "Identifiant de la personne :"
+      first_name: "Prénom :"
+      last_name: "nom de famille :"
+      user_email: "E-mail :"
+      status: "Statut :"
+      update_status: État de mise à jour
+      type: Document d'identité
+      flash:
+        notice: État du document mis à jour avec succès
+    after_upload_document:
+      after_upload_document: Votre compte n'est pas encore approuvé. Nous vérifions vos documents. Vous serez informé par e-mail.
+      header: Vous avez déjà téléchargé le document
+    email:
+      status_accepted: Votre compte a été accepté
+      status_pending: L'examen de votre compte est en cours
+      common:
+        hey: Bonjour %{name},
   canada_states:
     AB: Alberta
     BC: Colombie-Britannique

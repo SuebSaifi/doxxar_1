@@ -506,6 +506,51 @@ class PersonMailer < ActionMailer::Base # rubocop:disable Metrics/ClassLength
     premailer(mail(opts, &block))
   end
 
+  def status_approved(community, community_membership, person)
+    @community = community
+    @community_membership = community_membership
+    @person = person
+    @email = Email.find_by_person_id(person.id)
+    @email_address = @email.address
+    @host = community.full_domain
+    mail(:to =>  @email_address,
+         :from => community_specific_sender(community),
+         :subject =>  t("identification.email.status_accepted")
+        )do |format|
+        format.html { render v2_template(community.id, 'status_approved'), layout: v2_layout(community.id) }
+    end
+  end
+
+  def status_pending(community, community_membership, person)
+    @community = community
+    @community_membership = community_membership
+    @person = person
+    @email = Email.find_by_person_id(person.id)
+    @email_address = @email.address
+    @host = community.full_domain
+    mail(:to =>  @email_address,
+         :from => community_specific_sender(community),
+         :subject =>  t("identification.email.status_pending")
+        )do |format|
+        format.html { render v2_template(community.id, 'status_pending'), layout: v2_layout(community.id) }
+    end
+  end
+
+  def send_document_confirmation(community, admin, person, email, identity_document)
+    @person = person
+    @community = community
+    @document = identity_document
+    @admin = admin
+    @email = email
+    @host = community.full_domain
+    mail(:to => email.address,
+         :from => community_specific_sender(community),
+         :subject =>  "Confirm identity document for" #t("identification.email.admin_email")
+        )do |format|
+        format.html { render v2_template(community.id, 'admin_document_confirmation'), layout: v2_layout(community.id) }
+    end
+  end
+
   private
 
   def remove_url_protocol(url)

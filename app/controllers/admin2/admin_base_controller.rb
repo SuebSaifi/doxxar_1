@@ -5,7 +5,7 @@ class Admin2::AdminBaseController < ApplicationController
   before_action :ensure_is_admin
 
   #Allow admin to access admin panel before email confirmation
-  skip_before_action :cannot_access_without_confirmation
+  skip_before_action :cannot_access_without_confirmation, :cannot_access_without_identity_verification
 
   def clp_enabled
     @current_plan.try(:[], :features).try(:[], :landing_page) &&
